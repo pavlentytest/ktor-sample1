@@ -9,7 +9,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 @Serializable
 data class ExposedUser(val name: String, val age: Int) {
-    constructor(id: Int, name: String, age: Int): this(name, age)
+    //constructor(id: Int, name: String, age: Int) : this(name, age)
+    var id: Int = 0
+    constructor(id_: Int, name: String, age: Int) : this(name, age) {
+        this.id = id_
+    }
+    override fun toString(): String = "$id - $name - $age"
 }
 
 class UserService(database: Database) {
@@ -33,6 +38,8 @@ class UserService(database: Database) {
             it[age] = user.age
         }[Users.id]
     }
+
+
 
     suspend fun read(id: Int): ExposedUser? {
         return dbQuery {
